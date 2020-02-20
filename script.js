@@ -8,12 +8,20 @@ const text = document.getElementById('text')
 const amount = document.getElementById('amount')
 
 // #2 Dummy Transactions for dev stage
-const dummyTransactions = [
-	{id: 1, text: 'Flower', amount: -20},
-	{id: 2, text: 'Salary', amount: 300},
-	{id: 3, text: 'Book', amount: -10},
-	{id: 4, text: 'Camera', amount: 150}
-]
+// const dummyTransactions = [
+// 	{id: 1, text: 'Flower', amount: -20},
+// 	{id: 2, text: 'Salary', amount: 300},
+// 	{id: 3, text: 'Book', amount: -10},
+// 	{id: 4, text: 'Camera', amount: 150}
+// ]
+
+// #14 Local Storage
+const localStorageTransactions = JSON.parse(
+	localStorage.getItem('transactions')
+)
+
+let transactions =
+	localStorage.getItem('transactions') !== null ? localStorageTransactions : []
 
 //  #9 Function for Add Transaction (#8)
 function addTransaction(e) {
@@ -33,6 +41,9 @@ function addTransaction(e) {
 		addTransactionDOM(transaction)
 		updateValues()
 
+		// #16 Local Storage
+		updateLocalStorage()
+
 		text.value = ''
 		amount.value = ''
 	}
@@ -44,7 +55,7 @@ function generateID() {
 }
 
 // #3 Global state for transactions init will use dummy transactions
-let transactions = dummyTransactions
+// let transactions = dummyTransactions
 
 //#4 Add transactions to DOM list
 function addTransactionDOM(transaction) {
@@ -98,7 +109,15 @@ function updateValues() {
 function removeTransaction(id) {
 	transactions = transactions.filter(transaction => transaction.id !== id)
 
+	// #17 Remove transaction Local Storage
+	updateLocalStorage()
+
 	init()
+}
+
+// #15 Local Storage: Update local storage transactions
+function updateLocalStorage() {
+	localStorage.setItem('transactions', JSON.stringify(transactions))
 }
 
 //  #6 Init App
