@@ -15,6 +15,34 @@ const dummyTransactions = [
 	{id: 4, text: 'Camera', amount: 150}
 ]
 
+//  #9 Function for Add Transaction (#8)
+function addTransaction(e) {
+	e.preventDefault()
+
+	if (text.value.trim() === '' || amount.value.trim() === '') {
+		alert('Please add a text and amount')
+	} else {
+		const transaction = {
+			id: generateID(),
+			text: text.value,
+			amount: +amount.value
+		}
+
+		// console.log(transaction)
+		transactions.push(transaction)
+		addTransactionDOM(transaction)
+		updateValues()
+
+		text.value = ''
+		amount.value = ''
+	}
+}
+
+//  #10 Function to generateID()
+function generateID() {
+	return Math.floor(Math.random() * 100000000)
+}
+
 // #3 Global state for transactions init will use dummy transactions
 let transactions = dummyTransactions
 
@@ -66,6 +94,13 @@ function updateValues() {
 	money_minus.innerText = `$${expense}`
 }
 
+// #13 Remove transaction by ID
+function removeTransaction(id) {
+	transactions = transactions.filter(transaction => transaction.id !== id)
+
+	init()
+}
+
 //  #6 Init App
 function init() {
 	list.innerHTML = ''
@@ -75,3 +110,6 @@ function init() {
 }
 
 init()
+
+// #8 Event Listener Submit
+form.addEventListener('submit', addTransaction)
